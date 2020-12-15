@@ -1,0 +1,274 @@
+<html>
+    <head>
+        <title>Lantern On Cable</title>
+        <meta name="description" content="This is what the page is about!">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+        <script>
+            
+            $(function() {  // Run the following code after the entire HTML file has been downloaded and displayed on the browser
+                
+                var calc = function() {
+
+                    // Get form input data
+                    var form_data = $('#form-parameters').serializeArray()
+
+                    // Convert form data from array to object
+                    var data = {}
+                    $.each(form_data, function() {
+                        data[this.name] = parseFloat(this.value)
+                    })
+
+                    // Calculate the result using formula
+                    var x = (data.L - (data.n - 1)*data.S)/2.0
+                    var z = Math.round((data.n-1)/2)
+                    var lever_arm = z*x + (z*(z-1)/2.0)*data.S
+                    var Moment = data.P*lever_arm
+                    var H = Moment/data.hc/1000.0
+                    var V = data.P*data.n/2.0/1000.0
+
+                    // Display result on webpage
+                    $('#H').text(H.toFixed(2))
+                    $('#V').text(V.toFixed(2))
+
+                }
+
+                // Run calc() when button is clicked by user
+                $('#calculate-btn').click(function() {
+                    calc()
+                    $('#results-container').removeClass('invisible')
+                })
+
+
+
+
+                // Load data from user's JSON file
+                $('#dataFileInput-1').change(function(event) {
+                    onChangeDataFileInput(event)    // automatically runs this function when user has selected a file
+                })
+
+                function onChangeDataFileInput(event) {
+                    var reader = new FileReader()
+                    reader.onload = readDataFile    // automatically run this function after reader.readAsText() has ran
+                    console.log(event)
+                    reader.readAsText(event.target.files[0])
+                }
+
+                function readDataFile(event) {
+                    var dataset = JSON.parse(event.target.result)  // convert string to object
+
+                    for (name in dataset) {
+                        data = dataset[name];
+
+                        // Calculate the result using formula
+                        var x = (data.L - (data.n - 1)*data.S)/2.0
+                        var z = Math.round((data.n-1)/2)
+                        var lever_arm = z*x + (z*(z-1)/2.0)*data.S
+                        var Moment = data.P*lever_arm
+                        var H = Moment/data.hc/1000.0
+                        var V = data.P*data.n/2.0/1000.0
+
+                        // Display results
+                        $('#results-table-1').append(`<tr><td>${name}</td><td>${H}</td><td>${V}</td></tr>`)
+                    }
+                }
+
+                // Load data from user's JSON file
+                $('#dataFileInput-2').change(function(event) {
+                    onChangeDataFileInput2(event)    // automatically runs this function when user has selected a file
+                })
+
+                function onChangeDataFileInput2(event) {
+                    var reader = new FileReader()
+                    reader.onload = readDataFile2    // automatically run this function after reader.readAsText() has ran
+                    console.log(event)
+                    reader.readAsText(event.target.files[0])
+                }
+
+                function readDataFile2(event) {
+                    var dataset = JSON.parse(event.target.result)  // convert string to object
+
+                    for (name in dataset) {
+                        data = dataset[name];
+
+                        // Calculate the result using formula
+                        var x = (data.L - (data.n - 1)*data.S)/2.0
+                        var z = Math.round((data.n-1)/2)
+                        var lever_arm = z*x + (z*(z-1)/2.0)*data.S
+                        var Moment = data.P*lever_arm
+                        var H = Moment/data.hc/1000.0
+                        var V = data.P*data.n/2.0/1000.0
+
+                        // Display results
+                        $('#results-table-2').append(`<tr><td>${name}</td><td>${H}</td><td>${V}</td></tr>`)
+                    }
+                }
+
+            })
+
+
+        </script>
+    </head>
+    <body>
+        <div class="container">
+
+            <h2><b>Lanterns On Cable Problem</b></h2>
+        
+            <br />
+            <br />
+            <br />
+
+            <h3><b>- General Cable Theorem </b></h3>
+            <br />
+            
+            <div class="row">
+                
+                <div class="col-sm-12">
+                    
+                    <img src="images/Lantern.PNG" height=300/>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <form class="form-horizontal" id="form-parameters">
+
+                        <div class="form-group">
+                            <h5 class="question">Cable Span Length</h5>
+                            <label class="col-sm-1 control-label"> L =</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="L" placeholder="">
+                                    <span class="input-group-addon"> ft. </span>
+                                </div>
+                            </div>
+                        </div>
+
+    
+
+                        <div class="form-group">
+                            <h5 class="question">Number of Hanging Lanterns </h5>
+                            <label class="col-sm-1 control-label"> n =</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="n" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h5 class="question">Spacing between the Lanterns</h5>
+                            <label class="col-sm-1 control-label">S =</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="S" placeholder="">
+                                    <span class="input-group-addon"> ft. </span>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <div class="form-group">
+                            <h5 class="question">Unit Weight of Lantern </h5>
+                            <label class="col-sm-1 control-label"> P =</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="P" placeholder="">
+                                    <span class="input-group-addon"> lbs. </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h5 class="question"> The Sag at Center </h5>
+                            <label class="col-sm-1 control-label"> hc =</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="hc" placeholder="">
+                                    <span class="input-group-addon"> ft. </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="pull-right">
+                            <div type="submit" class="btn btn-primary btn-lg" id="calculate-btn">Calculate</div>
+                            <div type="submit" class="btn btn-default btn-lg">Reset</div>
+                        </div>
+
+                    </form>
+                    
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <div class="row">
+                        <div class="col-sm-8 ">
+                            
+                            <input type="file" id="dataFileInput-1">
+
+                            <br />
+
+                            <table class="table table-bordered table-hover table-striped" id="results-table-1">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Gravity</th>
+                                        <th scope="col">H (Kip.)</th>
+                                        <th scope="col">V (Kip.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <br />
+                    <br />
+                    <br />
+            
+                    <div class="row">
+                        <div class="col-sm-8 ">
+                            
+                            <input type="file" id="dataFileInput-2">
+
+                            <br />
+
+                            <table class="table table-bordered table-hover table-striped" id="results-table-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Wind</th>
+                                        <th scope="col">H (Kip.)</th>
+                                        <th scope="col">V (Kip.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end .row -->
+
+            <div class="row">
+                <div class="col-sm-8 results-container invisible" id="results-container">
+                    <h5> The Resultant force in Horizontal direction of the plane : </h5>
+                    <h4><b>H = </b><span id="H">  </span> lb. </h4>
+                    <br/>
+                    <h5> The Resultant force in Vertical direction of the plane : </h5>
+                    <h4><b>V = </b> <span id="V">  </span> lb. </h4>
+                </div>
+            </div>
+                
+
+        
+        </div><!--this is the end of container-->
+    </body>
+</html>

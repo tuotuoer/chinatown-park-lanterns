@@ -1,0 +1,22 @@
+.question {
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+
+
+
+
+
+
+.results-container {
+    background: #ddd;
+    padding: 25px;
+    margin: 50px 0 50px -15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
